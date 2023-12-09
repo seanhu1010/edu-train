@@ -8,9 +8,10 @@ from django.contrib.auth import authenticate, login
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.parsers import MultiPartParser, FormParser
 
 # Importing the User model and the UserSerializer
-from .models import User
+from .models import User, UserProfile
 from .serializers import UserSerializer
 
 
@@ -20,15 +21,21 @@ class UserInfoViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     # Specifying the serializer class to be used
     serializer_class = UserSerializer
+
     # Add IsAuthenticated permission to all actions
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     # Creating a custom action for user registration
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])  # 允许非身份验证访问
     def register(self, request):
         # Retrieving username and password from the request data
+        # 获取基本用户信息
         username = request.data.get('username')
         password = request.data.get('password')
+        # 获取额外的profile信息
+        avatar = request.data.get('avatar')
+        gender = request.data.get('gender')
+        occupation = request.data.get('occupation')
 
         # Checking for missing username or password
         if not username or not password:
@@ -40,8 +47,10 @@ class UserInfoViewSet(viewsets.ModelViewSet):
             return Response({'msg': 'Registration failed. User with this username already exists.'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # Creating a new user using Django's create_user method
+        # 创建User和UserProfile实例
         user = User.objects.create_user(username=username, password=password)
+        if avatar and gender and occupation:
+            UserProfile.objects.create(user=user, avatar=avatar, gender=gender, occupation=occupation)
 
         # Returning a success message
         return Response({'msg': 'Registration successful.'})

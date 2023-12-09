@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -145,3 +146,7 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     "http://10.1.1.31:8080",  # Add your frontend origin
 ]
+
+# 本地静态图片地址配置
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
