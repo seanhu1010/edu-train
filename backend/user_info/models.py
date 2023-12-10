@@ -10,7 +10,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # Adding additional fields to the Profile model
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
-    gender = models.CharField(max_length=10, choices=(('0', '男'), ('1', '女'), ('2', '未知')))
+    gender = models.CharField(max_length=10, choices=(('男', '男'), ('女', '女'), ('未知', '未知')), blank=True, null=True)
     occupation = models.CharField(max_length=100, blank=True, null=True)
 
     # String representation of the Profile model

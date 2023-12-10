@@ -20,9 +20,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     # date_joined字段将自动映射到User模型中的同名字段，并且只会显示年月日格式的日期
     date_joined = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
-    avatar = serializers.ImageField(source='userprofile.avatar', )
+    avatar = serializers.ImageField(source='userprofile.avatar')
     # 修改成ChoiceField，以在页面上能进行选择
-    gender = serializers.ChoiceField(source='userprofile.gender', choices=(('0', '男'), ('1', '女'), ('2', '未知')))
+    # gender = serializers.ChoiceField(source='userprofile.gender', choices=(('男', '男'), ('女', '女'), ('未知', '未知')))
+    gender = serializers.CharField(source='userprofile.gender')
     occupation = serializers.CharField(source='userprofile.occupation')
 
     class Meta:

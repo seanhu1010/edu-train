@@ -18,12 +18,12 @@ from .serializers import UserSerializer
 # Creating a viewset that inherits from ModelViewSet
 class UserInfoViewSet(viewsets.ModelViewSet):
     # Specifying the queryset for the viewset (all User objects)
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by('-date_joined')
     # Specifying the serializer class to be used
     serializer_class = UserSerializer
 
     # Add IsAuthenticated permission to all actions
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     # Creating a custom action for user registration
     @action(detail=False, methods=['post'], permission_classes=[AllowAny])  # 允许非身份验证访问
