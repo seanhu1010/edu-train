@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',  # 解决跨域
     'education',
     'user_info',
+    'restaurant_app',
 ]
 
 MIDDLEWARE = [

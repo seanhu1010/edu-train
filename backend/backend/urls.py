@@ -23,9 +23,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('education.urls')),  # 包括你的应用的URL配置
     path('api/', include('user_info.urls')),
+    path('api/', include('restaurant_app.urls')),
 ]
 
 # 添加本地图片media路由
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
