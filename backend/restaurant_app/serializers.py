@@ -33,11 +33,15 @@ class DishSerializer(serializers.ModelSerializer):
 
 # 订单表序列化
 class OrderSerializer(serializers.ModelSerializer):
+    transaction_time = serializers.SerializerMethodField()
     dish_details = serializers.SerializerMethodField()  # 新增字段
 
     class Meta:
         model = Order
         fields = '__all__'
+
+    def get_transaction_time(self, obj):
+        return obj.transaction_time.strftime("%Y-%m-%d %H:%M:%S")
 
     def get_dish_details(self, obj):
         dish_details = DishDetail.objects.filter(order=obj)
