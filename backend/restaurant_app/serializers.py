@@ -50,6 +50,19 @@ class OrderSerializer(serializers.ModelSerializer):
 
 # 菜品详情表序列化
 class DishDetailSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()  # 菜品名称
+    unit = serializers.SerializerMethodField()  # 菜品单位
+    specification = serializers.SerializerMethodField()  # 菜品规格
+
     class Meta:
         model = DishDetail
         fields = '__all__'
+
+    def get_name(self, obj):
+        return obj.dish.name
+
+    def get_unit(self, obj):
+        return obj.dish.unit.unit
+
+    def get_specification(self, obj):
+        return obj.dish.specification
