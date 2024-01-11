@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
 
@@ -48,6 +48,14 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=7, decimal_places=2, verbose_name='交易金额', blank=True, null=True)
     transaction_status = models.CharField(max_length=200, verbose_name='交易状态')
 
+    class Order(models.Model):
+        # 添加一个条件来检查total_amount是否已经改变，如果没有改变，就不需要再次保存
+        def save(self, *args, **kwargs):
+            old_total_amount = self.total_amount
+            super().save(*args, **kwargs)
+            if old_total_amount != self.total_amount:
+                super().save(*args, **kwargs)
+
     def __str__(self):
         return str(self.id)
 
@@ -69,7 +77,19 @@ def calculate_total_price(sender, instance, **kwargs):
     instance.total_price = instance.dish.price * instance.quantity
 
 
-# 在保存Order之前，计算total_amount
-@receiver(pre_save, sender=Order)
-def calculate_total_amount(sender, instance, **kwargs):
-    instance.total_amount = sum(detail.total_price for detail in instance.dishdetail_set.all())
+# # 在保存Order之后，计算total_amount
+# @receiver(post_save, sender=Order)
+# def calculate_total_amount(sender, instance, created, **kwargs):
+#     if created:
+#         return
+#     if instance.dishdetail_set.exists():
+#         new_total_amount = sum(detail.total_price for detail in instance.dishdetail_set.all())
+#         if new_total_amount != instance.total_amount:
+#             Order.objects.filter(pk=instance.pk).update(total_amount=new_total_amount)
+
+# 在保存DishDetail之后，更新相关的Order的total_amount
+@receiver(post_save, sender=DishDetail)
+def update_order_total_amount(sender, instance, **kwargs):
+    order = instance.order
+    order.total_amount = sum(detail.total_price for detail in order.dishdetail_set.all())
+    order.save()
