@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Table, DishCategory, DishUnit, Dish, Order, DishDetail
+from .models import Table, DishCategory, DishUnit, DishImage, Dish, Order, DishDetail
 
 
 # 桌位表序列化
@@ -24,11 +24,35 @@ class DishUnitSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# 菜品图片表序列化
+class DishImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DishImage
+        fields = '__all__'
+
+
 # 菜品表序列化
 class DishSerializer(serializers.ModelSerializer):
+    dish_unit = serializers.SerializerMethodField()  # 菜品单位
+    dish_category = serializers.SerializerMethodField()  # 菜品规格
+    dish_url = serializers.SerializerMethodField()  # 菜品图片url
+
     class Meta:
         model = Dish
         fields = '__all__'
+
+    def get_dish_unit(self, obj):
+        return obj.unit.unit
+
+    def get_dish_category(self, obj):
+        return obj.category.category
+
+    # obj.image.image.url只会返回相对URL。为了获取完整的URL，需要使用request.build_absolute_uri()方法
+    def get_dish_url(self, obj):
+        request = self.context.get('request')
+        if obj.image and hasattr(obj.image.image, 'url'):
+            return request.build_absolute_uri(obj.image.image.url)
+        return None
 
 
 # 订单表序列化

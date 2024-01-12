@@ -3,16 +3,16 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Table, DishCategory, DishUnit, Dish, Order, DishDetail
-from .serializers import TableSerializer, DishCategorySerializer, DishUnitSerializer, DishSerializer, OrderSerializer, \
-    DishDetailSerializer
+from .models import Table, DishCategory, DishUnit, DishImage, Dish, Order, DishDetail
+from .serializers import TableSerializer, DishCategorySerializer, DishUnitSerializer, DishImageSerializer, \
+    DishSerializer, OrderSerializer, DishDetailSerializer
 
 
 # 桌位表视图
 class TableViewSet(viewsets.ModelViewSet):
     queryset = Table.objects.all().order_by('table_number')
     serializer_class = TableSerializer
-    pagination_class = None
+    pagination_class = None  # 不分页
     # permission_classes = [IsAuthenticated]
 
 
@@ -20,6 +20,7 @@ class TableViewSet(viewsets.ModelViewSet):
 class DishCategoryViewSet(viewsets.ModelViewSet):
     queryset = DishCategory.objects.all().order_by('id')
     serializer_class = DishCategorySerializer
+    pagination_class = None  # 不分页
     # permission_classes = [IsAuthenticated]
 
 
@@ -27,6 +28,13 @@ class DishCategoryViewSet(viewsets.ModelViewSet):
 class DishUnitViewSet(viewsets.ModelViewSet):
     queryset = DishUnit.objects.all().order_by('id')
     serializer_class = DishUnitSerializer
+    pagination_class = None  # 不分页
+    # permission_classes = [IsAuthenticated]
+
+
+class DishImageViewSet(viewsets.ModelViewSet):
+    queryset = DishImage.objects.all().order_by('id')
+    serializer_class = DishImageSerializer
     # permission_classes = [IsAuthenticated]
 
 
@@ -45,6 +53,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
 
     # 可以根据时间段，以及桌号对订单进行过滤
+    # 例如：/orders?start_time=2023-12-01T00:00:00Z&end_time=2023-12-31T23:59:59Z&table_number=1
     def get_queryset(self):
         queryset = super().get_queryset()
         start_time = self.request.query_params.get('start_time', None)
