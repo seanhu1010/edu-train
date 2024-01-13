@@ -47,11 +47,11 @@ class DishSerializer(serializers.ModelSerializer):
     def get_dish_category(self, obj):
         return obj.category.category
 
-    # obj.image.image.url只会返回相对URL。为了获取完整的URL，需要使用request.build_absolute_uri()方法
+    # obj.file.file.url只会返回相对URL。为了获取完整的URL，需要使用request.build_absolute_uri()方法
     def get_dish_url(self, obj):
         request = self.context.get('request')
-        if obj.image and hasattr(obj.image.image, 'url'):
-            return request.build_absolute_uri(obj.image.image.url)
+        if obj.file and hasattr(obj.file.file, 'url'):
+            return request.build_absolute_uri(obj.file.file.url)
         return None
 
 

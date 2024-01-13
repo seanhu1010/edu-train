@@ -30,7 +30,7 @@ class DishUnit(models.Model):
 
 # 菜品图片表
 class DishImage(models.Model):
-    image = models.ImageField(upload_to='images/', verbose_name='菜品图片')
+    file = models.ImageField(upload_to='images/', verbose_name='菜品图片')
     name = models.CharField(max_length=200, verbose_name='菜品图片名称', blank=True)
 
     def __str__(self):
@@ -41,7 +41,7 @@ class DishImage(models.Model):
 class Dish(models.Model):
     category = models.ForeignKey(DishCategory, on_delete=models.CASCADE, verbose_name='菜品所属分类')
     specification = models.CharField(max_length=200, verbose_name='菜品规格')
-    image = models.ForeignKey(DishImage, on_delete=models.CASCADE, verbose_name='菜品图片')
+    file = models.ForeignKey(DishImage, on_delete=models.CASCADE, verbose_name='菜品图片')
     name = models.CharField(max_length=200, verbose_name='菜品名称')
     unit = models.ForeignKey(DishUnit, on_delete=models.CASCADE, verbose_name='菜品单位')
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='菜品单价')
@@ -84,8 +84,8 @@ class DishDetail(models.Model):
 @receiver(pre_save, sender=DishImage)
 def save_image_name(sender, instance, **kwargs):
     if not instance.name:
-        print(instance.image.name)
-        instance.name = splitext(instance.image.name)[0]
+        print(instance.file.name)
+        instance.name = splitext(instance.file.name)[0]
 
 
 # 在保存DishDetail之前，计算total_price
