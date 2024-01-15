@@ -128,6 +128,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    # 统一异常处理
+    'EXCEPTION_HANDLER': 'backend.utils.custom_exception_handler',
 }
 
 SIMPLE_JWT = {

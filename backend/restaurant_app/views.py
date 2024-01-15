@@ -33,14 +33,14 @@ class DishUnitViewSet(viewsets.ModelViewSet):
 
 
 class DishImageViewSet(viewsets.ModelViewSet):
-    queryset = DishImage.objects.all().order_by('id')
+    queryset = DishImage.objects.all().order_by('-id')
     serializer_class = DishImageSerializer
     # permission_classes = [IsAuthenticated]
 
 
 # 菜品表视图
 class DishViewSet(viewsets.ModelViewSet):
-    queryset = Dish.objects.all().order_by('id')
+    queryset = Dish.objects.all().order_by('-id')
     serializer_class = DishSerializer
     # permission_classes = [IsAuthenticated]
 

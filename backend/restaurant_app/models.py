@@ -6,7 +6,7 @@ from os.path import splitext
 
 # 桌位表
 class Table(models.Model):
-    table_number = models.PositiveIntegerField(verbose_name='桌号')
+    table_number = models.PositiveIntegerField(verbose_name='桌号', unique=True)
 
     def __str__(self):
         return str(self.table_number)
@@ -14,7 +14,7 @@ class Table(models.Model):
 
 # 菜品分类表
 class DishCategory(models.Model):
-    category = models.CharField(max_length=200, verbose_name='菜品类别')
+    category = models.CharField(max_length=200, verbose_name='菜品类别', unique=True)
 
     def __str__(self):
         return self.category
@@ -22,7 +22,7 @@ class DishCategory(models.Model):
 
 # 菜品单位表
 class DishUnit(models.Model):
-    unit = models.CharField(max_length=200, verbose_name='菜品单位')
+    unit = models.CharField(max_length=200, verbose_name='菜品单位', unique=True)
 
     def __str__(self):
         return self.unit
@@ -30,7 +30,7 @@ class DishUnit(models.Model):
 
 # 菜品图片表
 class DishImage(models.Model):
-    file = models.ImageField(upload_to='images/', verbose_name='菜品图片')
+    file = models.ImageField(upload_to='images/', verbose_name='菜品图片', unique=True)
     name = models.CharField(max_length=200, verbose_name='菜品图片名称', blank=True)
 
     def __str__(self):
@@ -40,11 +40,12 @@ class DishImage(models.Model):
 # 菜品表
 class Dish(models.Model):
     category = models.ForeignKey(DishCategory, on_delete=models.CASCADE, verbose_name='菜品所属分类')
-    specification = models.CharField(max_length=200, verbose_name='菜品规格')
+    specification = models.CharField(max_length=200, verbose_name='菜品规格', blank=True)
     file = models.ForeignKey(DishImage, on_delete=models.CASCADE, verbose_name='菜品图片')
-    name = models.CharField(max_length=200, verbose_name='菜品名称')
+    name = models.CharField(max_length=200, verbose_name='菜品名称', unique=True)
     unit = models.ForeignKey(DishUnit, on_delete=models.CASCADE, verbose_name='菜品单位')
     price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='菜品单价')
+    is_on_sale = models.BooleanField(default=True, verbose_name='是否在售')
 
     def __str__(self):
         return self.name
@@ -71,7 +72,7 @@ class Order(models.Model):
 
 # 菜品详情表
 class DishDetail(models.Model):
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, verbose_name='菜品id')
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, verbose_name='菜品id', limit_choices_to={'is_on_sale': True})
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='订单id')
     quantity = models.PositiveIntegerField(verbose_name='菜品下单数量')
     total_price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='总价', blank=True, null=True)
