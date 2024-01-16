@@ -2,10 +2,12 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from django.shortcuts import get_list_or_404
 
-from .models import Table, DishCategory, DishUnit, DishImage, Dish, Order, DishDetail
+from .models import Table, DishCategory, DishUnit, DishImage, Dish, Order, DishDetail, Employee
 from .serializers import TableSerializer, DishCategorySerializer, DishUnitSerializer, DishImageSerializer, \
-    DishSerializer, OrderSerializer, DishDetailSerializer
+    DishSerializer, OrderSerializer, DishDetailSerializer, EmployeeSerializer
 
 
 # 桌位表视图
@@ -83,3 +85,22 @@ class DishDetailViewSet(viewsets.ModelViewSet):
     queryset = DishDetail.objects.all().order_by('id')
     serializer_class = DishDetailSerializer
     # permission_classes = [IsAuthenticated]
+
+
+# 员工表视图
+class EmployeeViewSet(viewsets.ModelViewSet):
+    queryset = Employee.objects.all().order_by('-created_at')
+    serializer_class = EmployeeSerializer
+    # permission_classes = [IsAuthenticated]
+
+    # 通过发送一个POST请求到/employees/delete-multiple/来使用
+    # 在请求的body中提供一个名为ids的数组，其中包含想要删除的所有员工的id
+    @action(detail=False, methods=['post'], url_path='delete-multiple')
+    def delete_multiple(self, request, *args, **kwargs):
+        ids = request.data.get('ids', [])
+        if not ids:
+            return Response({'msg': '没有提供要删除的员工ID。'}, status=400)
+        employees = get_list_or_404(Employee, id__in=ids)
+        for employee in employees:
+            employee.delete()
+        return Response({'status': 'success'})

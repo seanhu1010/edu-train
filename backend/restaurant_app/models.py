@@ -72,13 +72,32 @@ class Order(models.Model):
 
 # 菜品详情表
 class DishDetail(models.Model):
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, verbose_name='菜品id', limit_choices_to={'is_on_sale': True})
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, verbose_name='菜品id',
+                             limit_choices_to={'is_on_sale': True})
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='订单id')
     quantity = models.PositiveIntegerField(verbose_name='菜品下单数量')
     total_price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name='总价', blank=True, null=True)
 
     def __str__(self):
         return f'{self.dish.name} - {self.order.id}'
+
+
+# 员工表
+class Employee(models.Model):
+    GENDER_CHOICES = (
+        ('男', '男'),
+        ('女', '女'),
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    employee_number = models.CharField(max_length=200, verbose_name='工号', unique=True)
+    name = models.CharField(max_length=200, verbose_name='姓名')
+    gender = models.CharField(max_length=2, choices=GENDER_CHOICES, verbose_name='性别')
+    position = models.CharField(max_length=200, verbose_name='职位')
+    is_resigned = models.BooleanField(default=False, verbose_name='是否离职')
+
+    def __str__(self):
+        return self.name
 
 
 # 在保存DishImage之前，将DishImage的name赋值为图片的名称

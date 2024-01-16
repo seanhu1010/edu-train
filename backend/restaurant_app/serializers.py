@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Table, DishCategory, DishUnit, DishImage, Dish, Order, DishDetail
+from .models import Table, DishCategory, DishUnit, DishImage, Dish, Order, DishDetail, Employee
 
 
 # 桌位表序列化
@@ -90,3 +90,15 @@ class DishDetailSerializer(serializers.ModelSerializer):
 
     def get_specification(self, obj):
         return obj.dish.specification
+
+
+# 员工表序列化
+class EmployeeSerializer(serializers.ModelSerializer):
+    created_at = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Employee
+        fields = '__all__'
+
+    def get_created_at(self, obj):
+        return obj.created_at.strftime("%Y-%m-%d %H:%M:%S")
