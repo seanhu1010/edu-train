@@ -72,6 +72,7 @@ class Order(models.Model):
 
 # 菜品详情表
 class DishDetail(models.Model):
+    order_time = models.DateTimeField(auto_now_add=True, verbose_name='下单时间')
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE, verbose_name='菜品id',
                              limit_choices_to={'is_on_sale': True})
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='订单id')
