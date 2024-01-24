@@ -147,9 +147,9 @@ SIMPLE_JWT = {
 }
 
 # 配置跨域
-CORS_ALLOWED_ORIGINS = [
-    "http://10.1.1.31:8080",  # Add your frontend origin
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://10.1.1.31:8888",  # Add your frontend origin
+# ]
 
 # 本地静态图片地址配置
 MEDIA_URL = '/media/'

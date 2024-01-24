@@ -1,7 +1,39 @@
 from rest_framework import viewsets
-from .models import Student, Teacher, LessonTime, Course, Fee, Enrollment, Attendance
-from .serializers import StudentSerializer, TeacherSerializer, LessonTimeSerializer, CourseSerializer, FeeSerializer, \
+from .models import Dictionary, DictionaryData, Avatar, Parent, Dropout, Student, Teacher, LessonTime, Course, Fee, \
+    Enrollment, Attendance
+from .serializers import DictionarySerializer, DictionaryDataSerializer, AvatarSerializer, ParentSerializer, \
+    DropoutSerializer, StudentSerializer, TeacherSerializer, LessonTimeSerializer, CourseSerializer, FeeSerializer, \
     EnrollmentSerializer, AttendanceSerializer
+
+
+# 字典表视图
+class DictionaryViewSet(viewsets.ModelViewSet):
+    queryset = Dictionary.objects.all()
+    serializer_class = DictionarySerializer
+
+
+# 字典数据表视图
+class DictionaryDataViewSet(viewsets.ModelViewSet):
+    queryset = DictionaryData.objects.all()
+    serializer_class = DictionaryDataSerializer
+
+
+# 头像表视图
+class AvatarViewSet(viewsets.ModelViewSet):
+    queryset = Avatar.objects.all()
+    serializer_class = AvatarSerializer
+
+
+# 家长表视图
+class ParentViewSet(viewsets.ModelViewSet):
+    queryset = Parent.objects.all()
+    serializer_class = ParentSerializer
+
+
+# 流失表视图
+class DropoutViewSet(viewsets.ModelViewSet):
+    queryset = Dropout.objects.all()
+    serializer_class = DropoutSerializer
 
 
 # 学员信息视图

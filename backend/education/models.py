@@ -1,4 +1,86 @@
 from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
+import uuid
+
+
+# 字典表模型
+class Dictionary(models.Model):
+    name = models.CharField(max_length=100, verbose_name="字典名称")
+    type = models.CharField(max_length=100, verbose_name="字典类型")
+    is_active = models.BooleanField(default=True, verbose_name="失效状态")
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="创建者",
+                                related_name='created_dictionaries')
+    created_time = models.DateTimeField(default=timezone.now, verbose_name="创建时间")
+    updater = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="更新者",
+                                related_name='updated_dictionaries')
+    updated_time = models.DateTimeField(default=timezone.now, verbose_name="更新时间")
+    remark = models.TextField(blank=True, null=True, verbose_name="备注")
+
+    def __str__(self):
+        return self.name
+
+
+# 字典数据表模型
+class DictionaryData(models.Model):
+    dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE, verbose_name="字典")
+    text = models.CharField(max_length=100, verbose_name="字典项文本")
+    value = models.CharField(max_length=100, verbose_name="字典项值")
+    order = models.IntegerField(verbose_name="排序")
+    is_active = models.BooleanField(default=True, verbose_name="失效状态")
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="创建者",
+                                related_name='created_dic_datas')
+    created_time = models.DateTimeField(default=timezone.now, verbose_name="创建时间")
+    updater = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="更新者",
+                                related_name='updated_dic_datas')
+    updated_time = models.DateTimeField(default=timezone.now, verbose_name="更新时间")
+    remark = models.TextField(blank=True, null=True, verbose_name="备注")
+
+    def __str__(self):
+        return self.text
+
+
+# 头像表模型
+class Avatar(models.Model):
+    file = models.ImageField(upload_to='avatars/', verbose_name="头像文件")
+    name = models.CharField(max_length=100, blank=True, default=str(uuid.uuid4), verbose_name="头像名称")
+
+    def __str__(self):
+        return self.name
+
+
+# 家长表模型
+class Parent(models.Model):
+    avatar = models.ForeignKey(Avatar, on_delete=models.CASCADE, verbose_name="家长头像")
+    role = models.CharField(max_length=100, verbose_name="家长角色")
+    name = models.CharField(max_length=100, verbose_name="家长姓名")
+    birthday = models.DateField(blank=True, null=True, verbose_name="家长生日")
+    address = models.TextField(blank=True, null=True, verbose_name="家庭住址")
+    is_active = models.BooleanField(default=True, verbose_name="激活状态")
+    phone = models.CharField(max_length=20, verbose_name="家长电话")
+    wechat = models.CharField(max_length=100, blank=True, null=True, verbose_name="家长微信号")
+
+    def __str__(self):
+        return self.name
+
+
+# 流失表模型
+class Dropout(models.Model):
+    description = models.TextField(verbose_name="流失说明")
+
+    def __str__(self):
+        return self.description
+
+
+# 老师信息模型
+class Teacher(models.Model):
+    name = models.CharField(max_length=100, verbose_name="姓名")
+    phone = models.CharField(max_length=20, verbose_name="手机号")
+    id_card = models.CharField(max_length=50, verbose_name="身份证号")
+    level = models.CharField(max_length=100, verbose_name="老师级别")
+
+    def __str__(self):
+        return self.name
 
 
 # 学员信息模型
@@ -8,20 +90,29 @@ class Student(models.Model):
     gender = models.CharField(max_length=10, verbose_name="性别")
     birthday = models.DateField(verbose_name="生日")
     address = models.TextField(verbose_name="家庭住址")
-    parent_name = models.CharField(max_length=100, verbose_name="家长姓名")
-    parent_phone = models.CharField(max_length=20, verbose_name="家长手机号")
-    id_card = models.CharField(max_length=50, verbose_name="学员身份证号")
-
-    def __str__(self):
-        return self.name
-
-
-# 老师信息模型
-class Teacher(models.Model):
-    name = models.CharField(max_length=100, verbose_name="姓名")
-    phone = models.CharField(max_length=20, verbose_name="手机号")
-    id_card = models.CharField(max_length=50, verbose_name="身份证号")
-    level = models.CharField(max_length=100, verbose_name="老师级别")
+    # parent_name = models.CharField(max_length=100, verbose_name="家长姓名")
+    # parent_phone = models.CharField(max_length=20, verbose_name="家长手机号")
+    id_type = models.ForeignKey(DictionaryData, on_delete=models.CASCADE, verbose_name="证件类型")
+    id_card = models.CharField(max_length=50, verbose_name="证件号码")
+    avatar = models.ForeignKey(Avatar, on_delete=models.CASCADE, verbose_name="学员头像")
+    dropout = models.ForeignKey(Dropout, on_delete=models.CASCADE, blank=True, null=True, verbose_name="流失id")
+    school = models.CharField(max_length=100, blank=True, null=True, verbose_name="学校")
+    grade = models.CharField(max_length=100, blank=True, null=True, verbose_name="年级")
+    class_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="班级")
+    nationality = models.CharField(max_length=100, blank=True, null=True, verbose_name="国籍")
+    ethnicity = models.CharField(max_length=100, blank=True, null=True, verbose_name="民族")
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="创建者", related_name='created_students')
+    created_time = models.DateTimeField(default=timezone.now, verbose_name="创建时间")
+    updater = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="更新者", related_name='updated_students')
+    updated_time = models.DateTimeField(default=timezone.now, verbose_name="更新时间")
+    remark = models.TextField(blank=True, null=True, verbose_name="备注")
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, verbose_name="家长id")
+    recruiter = models.ForeignKey(Teacher, on_delete=models.CASCADE, verbose_name="招生老师")
+    status = models.CharField(max_length=100, default='在读', verbose_name="学员状态")
+    is_active = models.BooleanField(default=True, verbose_name="失效状态")
+    class_status = models.CharField(max_length=100, default='未分班', verbose_name="分班状态")
+    source = models.CharField(max_length=100, default='到访', verbose_name="招生来源")
+    tag = models.CharField(max_length=100, blank=True, null=True, verbose_name="学员标签")
 
     def __str__(self):
         return self.name

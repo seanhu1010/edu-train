@@ -1,5 +1,41 @@
 from rest_framework import serializers
-from .models import Student, Teacher, LessonTime, Course, Fee, Enrollment, Attendance
+from .models import Dictionary, DictionaryData, Avatar, Parent, Dropout, Student, Teacher, LessonTime, Course, Fee, \
+    Enrollment, Attendance
+
+
+# 字典表序列化器
+class DictionarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dictionary
+        fields = '__all__'
+
+
+# 字典数据表序列化器
+class DictionaryDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DictionaryData
+        fields = '__all__'
+
+
+# 头像表序列化器
+class AvatarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Avatar
+        fields = '__all__'
+
+
+# 家长表序列化器
+class ParentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Parent
+        fields = '__all__'
+
+
+# 流失表序列化器
+class DropoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dropout
+        fields = '__all__'
 
 
 # 学员信息序列化器
