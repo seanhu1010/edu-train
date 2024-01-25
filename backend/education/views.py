@@ -1,9 +1,9 @@
 from rest_framework import viewsets
-from .models import Dictionary, DictionaryData, Avatar, Parent, Dropout, Student, Teacher, LessonTime, Course, Fee, \
-    Enrollment, Attendance
+from .models import Dictionary, DictionaryData, Avatar, Parent, Dropout, Teacher, Student, Fee, Period, Lesson, Course, \
+    FeeDetail, PaymentRecord, Attendance
 from .serializers import DictionarySerializer, DictionaryDataSerializer, AvatarSerializer, ParentSerializer, \
-    DropoutSerializer, StudentSerializer, TeacherSerializer, LessonTimeSerializer, CourseSerializer, FeeSerializer, \
-    EnrollmentSerializer, AttendanceSerializer
+    DropoutSerializer, TeacherSerializer, StudentSerializer, FeeSerializer, PeriodSerializer, LessonSerializer, \
+    CourseSerializer, FeeDetailSerializer, PaymentRecordSerializer, AttendanceSerializer
 
 
 # 字典表视图
@@ -48,31 +48,36 @@ class TeacherViewSet(viewsets.ModelViewSet):
     serializer_class = TeacherSerializer  # 使用TeacherSerializer进行序列化
 
 
-# 上课时间信息视图
-class LessonTimeViewSet(viewsets.ModelViewSet):
-    queryset = LessonTime.objects.all()  # 从数据库中获取所有上课时间信息视图
-    serializer_class = LessonTimeSerializer  # 使用LessonTimeSerializer进行序列化
-
-
-# 课程信息视图
-class CourseViewSet(viewsets.ModelViewSet):
-    queryset = Course.objects.all()  # 从数据库中获取所有课程信息
-    serializer_class = CourseSerializer  # 使用CourseSerializer进行序列化
-
-
-# 费用信息视图
 class FeeViewSet(viewsets.ModelViewSet):
-    queryset = Fee.objects.all()  # 从数据库中获取所有费用信息
-    serializer_class = FeeSerializer  # 使用FeeSerializer进行序列化
+    queryset = Fee.objects.all()
+    serializer_class = FeeSerializer
 
 
-# 学员选课关系视图
-class EnrollmentViewSet(viewsets.ModelViewSet):
-    queryset = Enrollment.objects.all()  # 从数据库中获取所有选课关系信息
-    serializer_class = EnrollmentSerializer  # 使用EnrollmentSerializer进行序列化
+class PeriodViewSet(viewsets.ModelViewSet):
+    queryset = Period.objects.all()
+    serializer_class = PeriodSerializer
 
 
-# 签到记录视图
+class LessonViewSet(viewsets.ModelViewSet):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
+
+
+class CourseViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+
+
+class FeeDetailViewSet(viewsets.ModelViewSet):
+    queryset = FeeDetail.objects.all()
+    serializer_class = FeeDetailSerializer
+
+
+class PaymentRecordViewSet(viewsets.ModelViewSet):
+    queryset = PaymentRecord.objects.all()
+    serializer_class = PaymentRecordSerializer
+
+
 class AttendanceViewSet(viewsets.ModelViewSet):
-    queryset = Attendance.objects.all()  # 从数据库中获取所有签到记录信息
-    serializer_class = AttendanceSerializer  # 使用AttendanceSerializer进行序列化
+    queryset = Attendance.objects.all()
+    serializer_class = AttendanceSerializer
