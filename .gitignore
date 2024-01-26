@@ -145,3 +145,4 @@ migrations/
 .idea/
 my-vue-app/
 restaurant_app/
+/backend/restaurant_app/
