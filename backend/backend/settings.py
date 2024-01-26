@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'corsheaders',  # 解决跨域
     'education',
     'user_info',
+    'restaurant_app',
 ]
 
 MIDDLEWARE = [
@@ -110,7 +112,8 @@ TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
-USE_TZ = True
+# USE_TZ = True
+USE_TZ = False  # 使用本地时间
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -125,10 +128,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    # 统一异常处理
+    'EXCEPTION_HANDLER': 'backend.utils.custom_exception_handler',
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     # 'ROTATE_REFRESH_TOKENS': False,
     # 'ALGORITHM': 'HS256',
@@ -142,6 +147,10 @@ SIMPLE_JWT = {
 }
 
 # 配置跨域
-CORS_ALLOWED_ORIGINS = [
-    "http://10.1.1.31:8080",  # Add your frontend origin
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://10.1.1.31:8888",  # Add your frontend origin
+# ]
+
+# 本地静态图片地址配置
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
