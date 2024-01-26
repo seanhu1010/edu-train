@@ -8,76 +8,80 @@ from .serializers import DictionarySerializer, DictionaryDataSerializer, AvatarS
 
 # 字典表视图
 class DictionaryViewSet(viewsets.ModelViewSet):
-    queryset = Dictionary.objects.all()
+    # 从数据库中获取所有字典信息，按照id排序
+    queryset = Dictionary.objects.all().order_by('id')
     serializer_class = DictionarySerializer
 
 
 # 字典数据表视图
 class DictionaryDataViewSet(viewsets.ModelViewSet):
-    queryset = DictionaryData.objects.all()
+    # 从数据库中获取所有字典信息，按照id排序
+    queryset = DictionaryData.objects.all().order_by('id')
     serializer_class = DictionaryDataSerializer
 
 
 # 头像表视图
 class AvatarViewSet(viewsets.ModelViewSet):
-    queryset = Avatar.objects.all()
+    # 从数据库中获取所有字典信息，按照id排序
+    queryset = Avatar.objects.all().order_by('-id')
     serializer_class = AvatarSerializer
 
 
 # 家长表视图
 class ParentViewSet(viewsets.ModelViewSet):
-    queryset = Parent.objects.all()
+    # 从数据库中获取所有字典信息，按照id排序
+    queryset = Parent.objects.all().order_by('-id')
     serializer_class = ParentSerializer
 
 
 # 流失表视图
 class DropoutViewSet(viewsets.ModelViewSet):
-    queryset = Dropout.objects.all()
+    queryset = Dropout.objects.all().order_by('-id')
     serializer_class = DropoutSerializer
 
 
 # 学员信息视图
 class StudentViewSet(viewsets.ModelViewSet):
-    queryset = Student.objects.all()  # 从数据库中获取所有学员信息
+    queryset = Student.objects.all().order_by('-id')  # 从数据库中获取所有学员信息
     serializer_class = StudentSerializer  # 使用StudentSerializer进行序列化
 
 
 # 老师信息视图
 class TeacherViewSet(viewsets.ModelViewSet):
-    queryset = Teacher.objects.all()  # 从数据库中获取所有老师信息
+    queryset = Teacher.objects.all().order_by('-id')  # 从数据库中获取所有老师信息
     serializer_class = TeacherSerializer  # 使用TeacherSerializer进行序列化
 
 
 class FeeViewSet(viewsets.ModelViewSet):
-    queryset = Fee.objects.all()
+    queryset = Fee.objects.all().order_by('-id')
     serializer_class = FeeSerializer
 
 
 class PeriodViewSet(viewsets.ModelViewSet):
-    queryset = Period.objects.all()
+    queryset = Period.objects.all().order_by('-id')
     serializer_class = PeriodSerializer
 
 
 class LessonViewSet(viewsets.ModelViewSet):
-    queryset = Lesson.objects.all()
+    queryset = Lesson.objects.all().order_by('-id')
     serializer_class = LessonSerializer
 
 
 class CourseViewSet(viewsets.ModelViewSet):
-    queryset = Course.objects.all()
+    queryset = Course.objects.all().order_by('-id')
     serializer_class = CourseSerializer
 
 
 class FeeDetailViewSet(viewsets.ModelViewSet):
-    queryset = FeeDetail.objects.all()
+    queryset = FeeDetail.objects.all().order_by('-id')
     serializer_class = FeeDetailSerializer
 
 
 class PaymentRecordViewSet(viewsets.ModelViewSet):
-    queryset = PaymentRecord.objects.all()
+    queryset = PaymentRecord.objects.all().order_by('-id')
     serializer_class = PaymentRecordSerializer
 
 
 class AttendanceViewSet(viewsets.ModelViewSet):
-    queryset = Attendance.objects.all()
+    queryset = Attendance.objects.all().order_by('-id')
     serializer_class = AttendanceSerializer
